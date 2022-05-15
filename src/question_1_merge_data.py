@@ -1,6 +1,7 @@
 import csv
 from fileinput import filename
 from operator import index
+from typing import final
 import pandas as pd
 import numpy as np
 import os
@@ -52,6 +53,7 @@ if __name__ == "__main__":
     # Axis 1 means its going to put the elements side by side
     final_dataset = pd.concat(
         [demand_merged_dataset, sources_merged_dataset], axis=1)
+    final_dataset = final_dataset.fillna(0)
 
     # Storing the final csv, with merged data
     final_dataset.to_csv(os.getcwd() + '/dataset/final_dataset.csv')
