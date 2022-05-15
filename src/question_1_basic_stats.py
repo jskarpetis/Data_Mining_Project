@@ -31,8 +31,7 @@ def produce_basic_stats(dataframe):
     
         
         
-def plot(dF):
-    
+def plot_data(dF):
     figure, axis = plt.subplots(4,4, figsize=(7,7))
     figure.tight_layout()
     columns = dF.columns.tolist()
@@ -66,4 +65,4 @@ if __name__ == "__main__":
     # for i in range(0, len(final_dataset), 289):
     #     batch_to_plot = final_dataset[i:i+289]
     #     plot(batch_to_plot)
-    plot(dF)
+    plot_data(dF)
