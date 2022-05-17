@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 from kneed import KneeLocator
 from sklearn.datasets import make_blobs
 from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
 from sklearn.metrics import silhouette_score
 from sklearn.preprocessing import StandardScaler, scale
 import os
@@ -23,6 +24,7 @@ def find_best_clusters(number_of_clusters, scaled_dataset):
 
 def kmeans_alg(n_clusters, n_init, max_iter, init, dataset):
     kmeans = KMeans(n_clusters=n_clusters, n_init=n_init, max_iter=max_iter, init=init)    
+    kmeans = KMeans()
     # fit_predict is just a convenience method that calls fit
     label = kmeans.fit_predict(dataset)
     
@@ -49,6 +51,22 @@ def preproccess_data(dataset):
             counter += 1
             
     return day_split_dataset
+
+
+def handle_data_trial(day_split_dataset):
+    # day_split_dataset=day_split_dataset.loc[:,['Current demand', 'Solar', 'Wind', 'Geothermal', 'Biomass', 'Biogas', 'Small hydro', 'Coal', 'Nuclear', 'Natural gas', 'Large hydro', 'Batteries', 'Imports', 'Other']]
+    # dimensionality reduction technique
+    pca = PCA(2)
+    new_dataset = pca.fit_transform(day_split_dataset)
+    # new_dataset = pandas.DataFrame(columns=['Current demand', 'Overall supply'])
+    # new_dataset['Current demand'] = day_split_dataset['Current demand']
+    
+    # columns = day_split_dataset.columns
+    # energy_dataset = day_split_dataset['Solar']
+    # for column in columns[4:]:
+    #     energy_dataset += day_split_dataset[column]
+    # new_dataset['Overall supply'] = energy_dataset
+    return new_dataset
     
 
 # 288
@@ -57,20 +75,18 @@ if __name__ == '__main__':
     dataset = pandas.read_csv(path)
     
     day_split_dataset = preproccess_data(dataset)
-    scaled_dataset = day_split_dataset.loc[:,['Current demand', 'Solar', 'Wind', 'Geothermal', 'Biomass', 'Biogas', 'Small hydro', 'Coal', 'Nuclear', 'Natural gas', 'Large hydro', 'Batteries', 'Imports', 'Other']]
-    # scaler = StandardScaler()
-    # scaled_dataset = scaler.fit_transform(day_split_dataset)
-    scaled_dataset = scaled_dataset.to_numpy()
-
+    scaled_dataset = handle_data_trial(day_split_dataset=day_split_dataset) 
+    # scaled_dataset = day_split_dataset.loc[:,['Current demand', 'Solar', 'Wind', 'Geothermal', 'Biomass', 'Biogas', 'Small hydro', 'Coal', 'Nuclear', 'Natural gas', 'Large hydro', 'Batteries', 'Imports', 'Other']]
+    # scaled_dataset = scaled_dataset.to_numpy()
     # optimal_no_clusters = find_best_clusters(number_of_clusters=30, scaled_dataset=scaled_dataset)
     # print(optimal_no_clusters)
     
-    inertia, centroids, labels, label = kmeans_alg(n_clusters=9, n_init=10, max_iter=30, init='k-means++', dataset=scaled_dataset)
+    inertia, centroids, labels, label = kmeans_alg(n_clusters=8, n_init=10, max_iter=30, init='k-means++', dataset=scaled_dataset)
+    
     # WE need to add all the supply and cluster according to that, we have the demand we need the added supply
     for i in numpy.unique(labels):
-        print(scaled_dataset[label == i , 0])
-        plt.scatter(scaled_dataset[label == i , 0] , scaled_dataset[label == i , 6] , label = i)
-        
+        plt.scatter(scaled_dataset[label == i , 0] , scaled_dataset[label == i , 1] , label = i)
+
     manager = plt.get_current_fig_manager()
     manager.full_screen_toggle()
     
