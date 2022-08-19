@@ -24,7 +24,7 @@ def find_best_clusters(number_of_clusters, scaled_dataset):
 
 def kmeans_alg(n_clusters, n_init, max_iter, init, dataset):
     kmeans = KMeans(n_clusters=n_clusters, n_init=n_init, max_iter=max_iter, init=init)    
-    kmeans = KMeans()
+    # kmeans = KMeans()
     # fit_predict is just a convenience method that calls fit
     label = kmeans.fit_predict(dataset)
     
@@ -88,7 +88,7 @@ if __name__ == '__main__':
         plt.scatter(scaled_dataset[label == i , 0] , scaled_dataset[label == i , 1] , label = i)
 
     manager = plt.get_current_fig_manager()
-    manager.full_screen_toggle()
+    # manager.full_screen_toggle()
     
     plt.scatter(centroids[:,0] , centroids[:,1] , s = 80, color="black")
     plt.legend()

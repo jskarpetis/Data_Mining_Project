@@ -46,7 +46,7 @@ def plot_data(dF):
 
     # Showing in full screen
     manager = plt.get_current_fig_manager()
-    manager.full_screen_toggle()
+    # manager.full_screen_toggle()
     plt.show()
         
         
@@ -58,8 +58,9 @@ if __name__ == "__main__":
     final_dataset = pd.read_csv(path)
     
     dF = final_dataset.loc[:,['Day ahead forecast', 'Hour ahead forecast', 'Current demand', 'Solar', 'Wind', 'Geothermal', 'Biomass', 'Biogas', 'Small hydro', 'Coal', 'Nuclear', 'Natural gas', 'Large hydro', 'Batteries', 'Imports', 'Other']]
-    final_stats = produce_basic_stats(dF)
-    print('Final stats -->\n {}'.format(final_stats))
+    # final_stats = produce_basic_stats(dF)
+    
+    print('Final stats -->\n {}'.format(dF.describe()))
     
     
     # for i in range(0, len(final_dataset), 289):
