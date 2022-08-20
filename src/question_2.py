@@ -56,6 +56,7 @@ def preproccess_data(dataset):
 def handle_data_trial(day_split_dataset):
     # day_split_dataset=day_split_dataset.loc[:,['Current demand', 'Solar', 'Wind', 'Geothermal', 'Biomass', 'Biogas', 'Small hydro', 'Coal', 'Nuclear', 'Natural gas', 'Large hydro', 'Batteries', 'Imports', 'Other']]
     # dimensionality reduction technique
+    day_split_dataset = StandardScaler().fit_transform(day_split_dataset)
     pca = PCA(2)
     new_dataset = pca.fit_transform(day_split_dataset)
     # new_dataset = pandas.DataFrame(columns=['Current demand', 'Overall supply'])
@@ -76,11 +77,6 @@ if __name__ == '__main__':
     
     day_split_dataset = preproccess_data(dataset)
     scaled_dataset = handle_data_trial(day_split_dataset=day_split_dataset) 
-    # scaled_dataset = day_split_dataset.loc[:,['Current demand', 'Solar', 'Wind', 'Geothermal', 'Biomass', 'Biogas', 'Small hydro', 'Coal', 'Nuclear', 'Natural gas', 'Large hydro', 'Batteries', 'Imports', 'Other']]
-    # scaled_dataset = scaled_dataset.to_numpy()
-    # optimal_no_clusters = find_best_clusters(number_of_clusters=30, scaled_dataset=scaled_dataset)
-    # print(optimal_no_clusters)
-    
     inertia, centroids, labels, label = kmeans_alg(n_clusters=8, n_init=10, max_iter=30, init='k-means++', dataset=scaled_dataset)
     
     # WE need to add all the supply and cluster according to that, we have the demand we need the added supply

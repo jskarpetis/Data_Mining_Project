@@ -1,11 +1,6 @@
-import csv
-from fileinput import filename
-from operator import index
-from typing import final
 import pandas as pd
 import numpy as np
 import os
-import sklearn
 
 
 def merge_csv(csv_header, folder_to_merge):
