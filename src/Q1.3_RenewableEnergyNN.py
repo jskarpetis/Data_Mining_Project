@@ -9,6 +9,7 @@ from tensorflow.keras.layers import Dense
 from tensorflow.keras.layers import LSTM
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_absolute_error
 
 def create_dataset(dataset, look_back):
 	dataX, dataY = [], []
@@ -58,7 +59,7 @@ if __name__ == "__main__" :
     model.add(LSTM(4, input_shape=(1, look_back)))
     model.add(Dense(1))
     model.compile(loss='mean_squared_error', optimizer='adam', metrics=['Accuracy'])
-    model.fit(train_X, train_Y, epochs=100, batch_size=1, verbose=2)
+    model.fit(train_X, train_Y, epochs=200, batch_size=1, verbose=2)
     model.save("LSTM_model.h5")
     trainPredict = model.predict(train_X)
     trainPredict = scaler.inverse_transform(trainPredict)
@@ -69,7 +70,10 @@ if __name__ == "__main__" :
     validation_Y = scaler.inverse_transform([validation_Y])
 
     trainScore = np.sqrt(mean_squared_error(train_Y[0], trainPredict[:,0]))
-    validationScore = np.sqrt(mean_squared_error(validation_Y[0], validationPredict[:,0]))
+    validationScoreMSE = np.sqrt(mean_squared_error(validation_Y[0], validationPredict[:,0]))
+    validationScoreRMSE = mean_squared_error(validation_Y[0], validationPredict[:,0],squared=False)
+    validationScoreMAE = mean_absolute_error(validation_Y[0], validationPredict[:,0])
+
     complete_set = complete_set[:slice_point+(5*288)]
     
     trainPredictPlot = np.empty_like(complete_set)
@@ -89,3 +93,6 @@ if __name__ == "__main__" :
     plt.plot(testPredictPlot)
     plt.legend(['Complete_set', 'Training_Set_Predictions', 'Validation_Set_Predictions'])
     plt.show()
+
+
+    
